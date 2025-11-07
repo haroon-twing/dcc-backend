@@ -19,6 +19,9 @@ const programRoutes = require('./routes/programs');
 const roleRoutes = require('./routes/roles');
 const permissionRoutes = require('./routes/permissions');
 const inboxRoutes = require('./routes/inbox');
+const provinceRoutes = require('./routes/provinces');
+const districtRoutes = require('./routes/districts');
+const madarisRoutes = require('./routes/madarisRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -49,6 +52,9 @@ app.use('/api/programs', programRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/inbox', inboxRoutes);
+app.use('/api/all-provinces', provinceRoutes);
+app.use('/api/all-districts', districtRoutes);
+app.use('/api', madarisRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
