@@ -24,6 +24,8 @@ const districtRoutes = require('./routes/districts');
 const madarisRoutes = require('./routes/madarisRoutes');
 const schoolOfThoughtRoutes = require('./routes/schoolOfThoughtRoutes');
 const madarisTeacherRoutes = require('./routes/madarisTeacherRoutes');
+const madarisStudentsRoutes = require('./routes/madarisStudentsRoutes');
+const countryRoutes = require('./routes/luCountryRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -58,9 +60,10 @@ app.use('/api/all-provinces', provinceRoutes);
 app.use('/api/all-districts', districtRoutes);
 // Mount madarisTeacherRoutes before madarisRoutes to prevent route conflicts
 app.use('/api/madaris', madarisTeacherRoutes);
+app.use('/api/madaris', madarisStudentsRoutes);
 app.use('/api', madarisRoutes);
 app.use('/api/all-school-of-thoughts', schoolOfThoughtRoutes);
-
+app.use('/api/all-countries', countryRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
