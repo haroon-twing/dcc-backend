@@ -49,6 +49,9 @@ const getAllMadrasaTeachers = asyncHandler(async (req, res) => {
           designation: 1,
           status: 1,
           isMohtamim: 1,
+          dob: 1,
+          address: 1,
+          joining_date: 1,
           madrasa: {
             _id: '$madrasa._id',
             name: '$madrasa.name'
