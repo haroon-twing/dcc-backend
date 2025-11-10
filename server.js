@@ -22,6 +22,8 @@ const inboxRoutes = require('./routes/inbox');
 const provinceRoutes = require('./routes/provinces');
 const districtRoutes = require('./routes/districts');
 const madarisRoutes = require('./routes/madarisRoutes');
+const schoolOfThoughtRoutes = require('./routes/schoolOfThoughtRoutes');
+const madarisTeacherRoutes = require('./routes/madarisTeacherRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -54,13 +56,17 @@ app.use('/api/permissions', permissionRoutes);
 app.use('/api/inbox', inboxRoutes);
 app.use('/api/all-provinces', provinceRoutes);
 app.use('/api/all-districts', districtRoutes);
+// Mount madarisTeacherRoutes before madarisRoutes to prevent route conflicts
+app.use('/api/madaris', madarisTeacherRoutes);
 app.use('/api', madarisRoutes);
+app.use('/api/all-school-of-thoughts', schoolOfThoughtRoutes);
+
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'Lead Management API is running',
+    message: 'APIs are running',
     timestamp: new Date().toISOString()
   });
 });
