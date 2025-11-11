@@ -23,8 +23,10 @@ const provinceRoutes = require('./routes/provinces');
 const districtRoutes = require('./routes/districts');
 const madarisRoutes = require('./routes/madarisRoutes');
 const schoolOfThoughtRoutes = require('./routes/schoolOfThoughtRoutes');
-const madarisTeacherRoutes = require('./routes/madarisTeacherRoutes');
+const madarisBankAccountRoutes = require('./routes/madarisBankAccountRoutes');
+const madarisMeetingRoutes = require('./routes/madarisMeetingRoutes');
 const madarisStudentsRoutes = require('./routes/madarisStudentsRoutes');
+const madarisTeacherRoutes = require('./routes/madarisTeacherRoutes');
 const countryRoutes = require('./routes/luCountryRoutes');
 
 // Import middleware
@@ -58,9 +60,15 @@ app.use('/api/permissions', permissionRoutes);
 app.use('/api/inbox', inboxRoutes);
 app.use('/api/all-provinces', provinceRoutes);
 app.use('/api/all-districts', districtRoutes);
-// Mount madarisTeacherRoutes before madarisRoutes to prevent route conflicts
-app.use('/api/madaris', madarisTeacherRoutes);
-app.use('/api/madaris', madarisStudentsRoutes);
+// Mount madaris related routes under /api/madaris
+const madarisRouter = express.Router();
+madarisRouter.use('/teachers', madarisTeacherRoutes);
+madarisRouter.use('/students', madarisStudentsRoutes);
+madarisRouter.use('/bank-accounts', madarisBankAccountRoutes);
+madarisRouter.use('/meetings', madarisMeetingRoutes);
+app.use('/api/madaris', madarisRouter);
+
+// Other routes
 app.use('/api', madarisRoutes);
 app.use('/api/all-school-of-thoughts', schoolOfThoughtRoutes);
 app.use('/api/all-countries', countryRoutes);
