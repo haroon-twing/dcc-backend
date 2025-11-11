@@ -65,7 +65,8 @@ const madarisMeetingSchema = new Schema({
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  toObject: { virtuals: true },
+  collection: 'madaris_meetings'
 });
 
 // Indexes

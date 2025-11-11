@@ -56,7 +56,8 @@ const madarisBankAccountSchema = new Schema({
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  toObject: { virtuals: true },
+  collection: 'madaris_bank_accounts'
 });
 
 // Indexes
