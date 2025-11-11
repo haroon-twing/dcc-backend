@@ -26,6 +26,9 @@ const schoolOfThoughtRoutes = require('./routes/schoolOfThoughtRoutes');
 const madarisTeacherRoutes = require('./routes/madarisTeacherRoutes');
 const madarisStudentsRoutes = require('./routes/madarisStudentsRoutes');
 const countryRoutes = require('./routes/luCountryRoutes');
+const madarisTeachingVocationalSkillRoutes = require('./routes/madarisTeachingVocationalSkillRoutes');
+const madarisTeachersSupportHighEducationRoutes = require('./routes/madarisTeachersSupportHighEducationRoutes');
+const madarisModelInternationalStandardRoutes = require('./routes/madarisModelInternationalStandardRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -64,6 +67,9 @@ app.use('/api/madaris', madarisStudentsRoutes);
 app.use('/api', madarisRoutes);
 app.use('/api/all-school-of-thoughts', schoolOfThoughtRoutes);
 app.use('/api/all-countries', countryRoutes);
+app.use('/api/madaris', madarisTeachingVocationalSkillRoutes);
+app.use('/api/madaris', madarisTeachersSupportHighEducationRoutes);
+app.use('/api/madaris', madarisModelInternationalStandardRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
