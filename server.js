@@ -29,6 +29,7 @@ const countryRoutes = require('./routes/luCountryRoutes');
 const madarisTeachingVocationalSkillRoutes = require('./routes/madarisTeachingVocationalSkillRoutes');
 const madarisTeachersSupportHighEducationRoutes = require('./routes/madarisTeachersSupportHighEducationRoutes');
 const madarisModelInternationalStandardRoutes = require('./routes/madarisModelInternationalStandardRoutes');
+const madarisBankAccountRoutes = require('./routes/madarisBankAccountRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -70,6 +71,7 @@ app.use('/api/all-countries', countryRoutes);
 app.use('/api/madaris', madarisTeachingVocationalSkillRoutes);
 app.use('/api/madaris', madarisTeachersSupportHighEducationRoutes);
 app.use('/api/madaris', madarisModelInternationalStandardRoutes);
+app.use('/api/madaris', madarisBankAccountRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
