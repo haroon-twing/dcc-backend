@@ -26,7 +26,7 @@ const madarisNonCooperativeSchema = new mongoose.Schema({
   created_by: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: false  // Made this optional
   },
   updated_by: {
     type: mongoose.Schema.Types.ObjectId,
@@ -45,29 +45,5 @@ const madarisNonCooperativeSchema = new mongoose.Schema({
 
 // Indexes
 madarisNonCooperativeSchema.index({ madaris_id: 1, is_active: 1 });
-
-// Virtual for populating madrassa details
-madarisNonCooperativeSchema.virtual('madrassa', {
-  ref: 'Madaris',
-  localField: 'madrasis_id',
-  foreignField: '_id',
-  justOne: true
-});
-
-// Virtual for populating createdBy details
-madarisNonCooperativeSchema.virtual('createdByUser', {
-  ref: 'User',
-  localField: 'created_by',
-  foreignField: '_id',
-  justOne: true
-});
-
-// Virtual for populating updatedBy details
-madarisNonCooperativeSchema.virtual('updatedByUser', {
-  ref: 'User',
-  localField: 'updated_by',
-  foreignField: '_id',
-  justOne: true
-});
 
 module.exports = mongoose.model('MadarisNonCooperative', madarisNonCooperativeSchema);

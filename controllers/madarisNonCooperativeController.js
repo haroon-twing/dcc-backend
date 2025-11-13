@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const getAllNonCooperativeRecords = asyncHandler(async (req, res) => {
   try {
     const { madaris_id } = req.params;
+    console.log('Fetching records for madaris_id:', madaris_id);
 
     if (!mongoose.Types.ObjectId.isValid(madaris_id)) {
       return res.status(400).json({
@@ -16,6 +17,19 @@ const getAllNonCooperativeRecords = asyncHandler(async (req, res) => {
       });
     }
 
+    // First, verify the madrasa exists
+    const madrasaExists = await mongoose.connection.db.collection('madaris').findOne({
+      _id: new mongoose.Types.ObjectId(madaris_id)
+    });
+
+    if (!madrasaExists) {
+      return res.status(404).json({
+        success: false,
+        message: 'Madrasa not found'
+      });
+    }
+
+    // Get all active records for this madrasa
     const records = await MadarisNonCooperative.aggregate([
       {
         $match: {
@@ -31,23 +45,18 @@ const getAllNonCooperativeRecords = asyncHandler(async (req, res) => {
           as: 'madrasa'
         }
       },
-      { $unwind: '$madrasa' },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'created_by',
-          foreignField: '_id',
-          as: 'createdBy'
-        }
-      },
-      { $unwind: '$createdBy' },
+      { $unwind: { path: '$madrasa', preserveNullAndEmptyArrays: true } },
       {
         $project: {
+          _id: 1,
+          madaris_id: 1,
           role_of_institute: 1,
           nature_of_non_cooperation: 1,
           remarks: 1,
+          is_active: 1,
+          created_at: 1,
+          updated_at: 1,
           'madrasa.name': 1,
-          'createdBy.name': 1,
           createdAt: 1,
           updatedAt: 1
         }
@@ -83,18 +92,25 @@ const createNonCooperativeRecord = asyncHandler(async (req, res) => {
       });
     }
 
-    const nonCoopRecord = new MadarisNonCooperative({
+    // Create record data object
+    const recordData = {
       madaris_id,
       role_of_institute,
       nature_of_non_cooperation,
-      remarks,
-      created_by: req.user._id
-    });
+      remarks
+    };
 
+    // Only add created_by if user is authenticated
+    if (req.user && req.user._id) {
+      recordData.created_by = req.user._id;
+    }
+
+    // Create and save the new record
+    const nonCoopRecord = new MadarisNonCooperative(recordData);
     const createdRecord = await nonCoopRecord.save();
     
-    // Populate the created record with related data
-    const populatedRecord = await MadarisNonCooperative.aggregate([
+    // Get the full populated record
+    const fullRecord = await MadarisNonCooperative.aggregate([
       { $match: { _id: createdRecord._id } },
       {
         $lookup: {
@@ -106,31 +122,35 @@ const createNonCooperativeRecord = asyncHandler(async (req, res) => {
       },
       { $unwind: '$madrasa' },
       {
-        $lookup: {
-          from: 'users',
-          localField: 'created_by',
-          foreignField: '_id',
-          as: 'createdBy'
-        }
-      },
-      { $unwind: '$createdBy' },
-      {
         $project: {
+          _id: 1,
+          madaris_id: 1,
           role_of_institute: 1,
           nature_of_non_cooperation: 1,
           remarks: 1,
           'madrasa.name': 1,
-          'createdBy.name': 1,
-          createdAt: 1,
-          updatedAt: 1
+          created_by: 1,
+          updated_by: 1,
+          is_active: 1,
+          created_at: 1,
+          updated_at: 1
         }
       }
     ]);
 
-    res.status(201).json({
-      success: true,
-      data: populatedRecord[0]
-    });
+    if (fullRecord && fullRecord.length > 0) {
+      // If we got the populated record, return it
+      res.status(201).json({
+        success: true,
+        data: fullRecord[0]
+      });
+    } else {
+      // Fallback: return the basic created record if population fails
+      res.status(201).json({
+        success: true,
+        data: createdRecord
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -141,11 +161,12 @@ const createNonCooperativeRecord = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get a single non-cooperative record
-// @route   GET /api/madaris/non-cooperative/:id
+// @route   GET /api/madaris/get-single-non-cooperative-record/:id
 // @access  Public
 const getNonCooperativeRecord = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('Fetching non-cooperative record with ID:', id);
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
@@ -154,7 +175,8 @@ const getNonCooperativeRecord = asyncHandler(async (req, res) => {
       });
     }
 
-    const record = await MadarisNonCooperative.aggregate([
+    // First try to get the record with aggregation
+    const records = await MadarisNonCooperative.aggregate([
       {
         $match: {
           _id: new mongoose.Types.ObjectId(id),
@@ -169,41 +191,51 @@ const getNonCooperativeRecord = asyncHandler(async (req, res) => {
           as: 'madrasa'
         }
       },
-      { $unwind: '$madrasa' },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'created_by',
-          foreignField: '_id',
-          as: 'createdBy'
-        }
-      },
-      { $unwind: '$createdBy' },
+      { $unwind: { path: '$madrasa', preserveNullAndEmptyArrays: true } },
       {
         $project: {
+          _id: 1,
+          madaris_id: 1,
           role_of_institute: 1,
           nature_of_non_cooperation: 1,
           remarks: 1,
-          'madrasa.name': 1,
-          'createdBy.name': 1,
-          createdAt: 1,
-          updatedAt: 1
+          is_active: 1,
+          created_at: 1,
+          updated_at: 1,
+          'madrasa.name': 1
         }
       }
     ]);
 
-    if (!record || record.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'Record not found'
+    // Check if we found a record
+    if (!records || records.length === 0) {
+      // Fallback to a simple find if aggregation returns nothing
+      const simpleRecord = await MadarisNonCooperative.findOne({
+        _id: id,
+        is_active: true
+      });
+
+      if (!simpleRecord) {
+        return res.status(404).json({
+          success: false,
+          message: 'Record not found or inactive'
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: simpleRecord
       });
     }
 
-    res.status(200).json({
+    // Return the first (and should be only) record from aggregation
+    return res.status(200).json({
       success: true,
-      data: record[0]
+      data: records[0]
     });
+    
   } catch (error) {
+    console.error('Error fetching non-cooperative record:', error);
     res.status(500).json({
       success: false,
       message: 'Server Error',
@@ -241,7 +273,10 @@ const updateNonCooperativeRecord = asyncHandler(async (req, res) => {
     if (nature_of_non_cooperation !== undefined) record.nature_of_non_cooperation = nature_of_non_cooperation;
     if (remarks !== undefined) record.remarks = remarks;
     
-    record.updated_by = req.user._id;
+    // Only set updated_by if user is authenticated
+    if (req.user && req.user._id) {
+      record.updated_by = req.user._id;
+    }
     
     const updatedRecord = await record.save();
     
@@ -327,7 +362,11 @@ const deleteNonCooperativeRecord = asyncHandler(async (req, res) => {
 
     // Soft delete
     record.is_active = false;
-    record.updated_by = req.user._id;
+    
+    // Only set updated_by if user is authenticated
+    if (req.user && req.user._id) {
+      record.updated_by = req.user._id;
+    }
     
     await record.save();
 
