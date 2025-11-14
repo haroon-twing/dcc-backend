@@ -43,8 +43,7 @@ madarisTeachersSupportHighEducationSchema.index({ madaris_id: 1 });
 
 // Create a compound index for better query performance
 madarisTeachersSupportHighEducationSchema.index(
-  { teacher_id: 1, education_obtain: 1 },
-  { unique: true, name: 'unique_teacher_education' }
+  { teacher_id: 1, education_obtain: 1 }
 );
 
 const MadarisTeachersSupportHighEducation = mongoose.model(
