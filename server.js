@@ -38,6 +38,8 @@ const madarisCurriculumSubjectAssignmentRoutes = require('./routes/madarisCurric
 const madarisMadarisCurriculumAssignmentRoutes = require('./routes/madarisMadarisCurriculumAssignmentRoutes');
 const madarisNonCooperativeRoutes = require('./routes/madarisNonCooperativeRoutes');
 const madarisIllegalActionRoutes = require('./routes/madarisIllegalActionRoutes');
+const safecityMeasuresTakenRoutes = require('./routes/safecityMeasuresTakenRoutes');
+const safecityMainRoutes = require('./routes/safecityMainRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -88,6 +90,8 @@ app.use('/api/madaris', madarisCurriculumSubjectAssignmentRoutes);
 app.use('/api/madaris', madarisMadarisCurriculumAssignmentRoutes);
 app.use('/api/madaris', madarisNonCooperativeRoutes);
 app.use('/api/madaris', madarisIllegalActionRoutes);
+app.use('/api/safecity', safecityMainRoutes);
+app.use('/api/safecity', safecityMeasuresTakenRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
