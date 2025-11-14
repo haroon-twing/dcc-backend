@@ -64,7 +64,7 @@ const getAllTeachersSupportHighEducation = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get single teacher support high education record by ID
-// @route   GET /api/madaris/get-teachers-support-high-education/:id
+// @route   GET /api/madaris/get-single-teacher-support-high-education/:id
 // @access  Public
 const getTeacherSupportHighEducationById = asyncHandler(async (req, res) => {
   try {
