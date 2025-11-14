@@ -78,6 +78,7 @@ app.use('/api/madaris', madarisStudentsRoutes);
 app.use('/api', madarisRoutes);
 app.use('/api/all-school-of-thoughts', schoolOfThoughtRoutes);
 app.use('/api/all-countries', countryRoutes);
+app.use('/api/all-cities', countryRoutes);
 app.use('/api/madaris', madarisTeachingVocationalSkillRoutes);
 app.use('/api/madaris', madarisTeachersSupportHighEducationRoutes);
 app.use('/api/madaris', madarisModelInternationalStandardRoutes);

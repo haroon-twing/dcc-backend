@@ -25,7 +25,53 @@ const getAllCountries = asyncHandler(async (req, res) => {
   }
 });
 
+// Add this new controller function
+const getAllCitiesWithDistricts = asyncHandler(async (req, res) => {
+  try {
+    const cities = await LuCity.aggregate([
+      {
+        $match: { is_active: true }
+      },
+      {
+        $lookup: {
+          from: 'lu_districts',
+          localField: 'district_id',
+          foreignField: '_id',
+          as: 'district'
+        }
+      },
+      { $unwind: '$district' },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          status: 1,
+          district_id: 1,
+          district_name: '$district.name',
+          created_at: 1,
+          updated_at: 1
+        }
+      },
+      { $sort: { name: 1 } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      count: cities.length,
+      data: cities
+    });
+  } catch (error) {
+    console.error('Error fetching cities with districts:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching cities with districts',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 
 module.exports = {
-  getAllCountries
+  getAllCountries,
+  getAllCitiesWithDistricts
 };
