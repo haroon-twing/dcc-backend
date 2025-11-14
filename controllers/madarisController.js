@@ -8,8 +8,6 @@ const { body, validationResult } = require('express-validator');
 const addMadrassa = [
   // Input validation
   body('name').notEmpty().withMessage('Name is required'),
-  body('prov_id').isMongoId().withMessage('Valid province ID is required'),
-  body('district_id').isMongoId().withMessage('Valid district ID is required'),
   //body('status').isIn(['active', 'inactive']).withMessage('Invalid status'),
   
   asyncHandler(async (req, res) => {
