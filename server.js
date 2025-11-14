@@ -40,6 +40,9 @@ const madarisNonCooperativeRoutes = require('./routes/madarisNonCooperativeRoute
 const madarisIllegalActionRoutes = require('./routes/madarisIllegalActionRoutes');
 const safecityMeasuresTakenRoutes = require('./routes/safecityMeasuresTakenRoutes');
 const safecityMainRoutes = require('./routes/safecityMainRoutes');
+const safecityIntegrationsRoutes = require('./routes/safecityIntegrationsRoutes');
+const safecityThreatAlertsRoutes = require('./routes/safecityThreatAlertsRoutes');
+const safecityPoliceStationConnectivityRoutes = require('./routes/safecityPoliceStationConnectivityRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -93,6 +96,9 @@ app.use('/api/madaris', madarisNonCooperativeRoutes);
 app.use('/api/madaris', madarisIllegalActionRoutes);
 app.use('/api/safecity', safecityMainRoutes);
 app.use('/api/safecity', safecityMeasuresTakenRoutes);
+app.use('/api/safecity', safecityIntegrationsRoutes);
+app.use('/api/safecity', safecityThreatAlertsRoutes);
+app.use('/api/safecity', safecityPoliceStationConnectivityRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
