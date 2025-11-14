@@ -1,23 +1,34 @@
 const mongoose = require('mongoose');
 
+// Define the schema first
 const safecityMainSchema = new mongoose.Schema({
   province_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Province',
+    ref: 'LuProvince',
     required: [true, 'Province ID is required'],
-    index: true
+    index: true,
+    // Add a custom getter to handle population
+    get: function(v) {
+      return mongoose.Types.ObjectId(v);
+    }
   },
   district_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'District',
+    ref: 'LuDistrict',
     required: [true, 'District ID is required'],
-    index: true
+    index: true,
+    get: function(v) {
+      return mongoose.Types.ObjectId(v);
+    }
   },
   city_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'City',
+    ref: 'LuCity',
     required: [true, 'City ID is required'],
-    index: true
+    index: true,
+    get: function(v) {
+      return mongoose.Types.ObjectId(v);
+    }
   },
   approval_date: {
     type: Date,
@@ -109,6 +120,22 @@ safecityMainSchema.index(
   }
 );
 
+// Add static method to handle safe population
+safecityMainSchema.statics.safeFindById = async function(id) {
+  try {
+    return await this.findById(id)
+      .populate('province_id', 'name')
+      .populate('district_id', 'name')
+      .populate('city_id', 'name')
+      .populate('created_by', 'name')
+      .populate('updated_by', 'name');
+  } catch (error) {
+    // If population fails, return the document without population
+    return await this.findById(id);
+  }
+};
+
+// Create the model after defining all methods
 const SafecityMain = mongoose.model('SafecityMain', safecityMainSchema);
 
 module.exports = SafecityMain;
