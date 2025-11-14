@@ -80,7 +80,20 @@ const madarisSchema = new Schema({
   updatedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  no_of_local_students: {
+    type: Number,
+    default: 0,
+    min: [0, 'Number of local students cannot be negative']
+  },
+  category: {
+    type: String,
+    trim: true
+  },
+  non_cooperation_reason: {
+    type: String,
+    trim: true
+  },
 }, {
   timestamps: true,
   collection: 'madaris'
