@@ -8,10 +8,10 @@ const {
   deleteSafecityThreatAlert
 } = require('../controllers/safecityThreatAlertsController');
 
-// @route   GET /api/safecity/get-safecitythreatalerts
-// @desc    Get all SafecityThreatAlerts records
+// @route   GET /api/safecity/get-safecitythreatalerts/:sc_id
+// @desc    Get SafecityThreatAlerts records by sc_id
 // @access  Public
-router.get('/get-safecitythreatalerts', getAllSafecityThreatAlerts);
+router.get('/get-safecitythreatalerts/:sc_id', getAllSafecityThreatAlerts);
 
 // @route   GET /api/safecity/get-single-safecitythreatalert/:id
 // @desc    Get single SafecityThreatAlerts record

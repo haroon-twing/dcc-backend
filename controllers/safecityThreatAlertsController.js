@@ -2,12 +2,24 @@ const asyncHandler = require('express-async-handler');
 const SafecityThreatAlerts = require('../models/SafecityThreatAlerts');
 const mongoose = require('mongoose');
 
-// @desc    Get all SafecityThreatAlerts records
-// @route   GET /api/safecity/get-safecitythreatalerts
+// @desc    Get SafecityThreatAlerts records by sc_id
+// @route   GET /api/safecity/get-safecitythreatalerts/:sc_id
 // @access  Public
 const getAllSafecityThreatAlerts = asyncHandler(async (req, res) => {
   try {
-    const records = await SafecityThreatAlerts.find({ is_active: true })
+    const { sc_id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(sc_id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid sc_id format'
+      });
+    }
+
+    const records = await SafecityThreatAlerts.find({ 
+      sc_id: sc_id,
+      is_active: true 
+    })
       .populate('sc_id', 'present_status')
       .populate('created_by', 'name')
       .populate('updated_by', 'name')

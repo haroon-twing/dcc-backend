@@ -8,10 +8,10 @@ const {
   deleteSafecityPoliceStationConnectivity
 } = require('../controllers/safecityPoliceStationConnectivityController');
 
-// @route   GET /api/safecity/get-safecitypolicestationconnectivities
-// @desc    Get all SafecityPoliceStationConnectivity records
+// @route   GET /api/safecity/get-safecitypolicestationconnectivities/:sc_id
+// @desc    Get SafecityPoliceStationConnectivity records by sc_id
 // @access  Public
-router.get('/get-safecitypolicestationconnectivities', getAllSafecityPoliceStationConnectivities);
+router.get('/get-safecitypolicestationconnectivities/:sc_id', getAllSafecityPoliceStationConnectivities);
 
 // @route   GET /api/safecity/get-single-safecitypolicestationconnectivity/:id
 // @desc    Get single SafecityPoliceStationConnectivity record
