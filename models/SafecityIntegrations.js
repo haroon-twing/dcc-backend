@@ -13,6 +13,10 @@ const safecityIntegrationsSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  remarks: {
+    type: String,
+    trim: true
+  },
   sc_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'SafecityMain',
