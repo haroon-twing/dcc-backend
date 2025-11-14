@@ -11,7 +11,7 @@ const {
 // @route   GET /api/safecity/get-safecityintegrations
 // @desc    Get all SafecityIntegrations records
 // @access  Public
-router.get('/get-safecityintegrations', getAllSafecityIntegrations);
+router.get('/get-safecityintegrations/:sc_id', getAllSafecityIntegrations);
 
 // @route   GET /api/safecity/get-single-safecityintegration/:id
 // @desc    Get single SafecityIntegrations record
