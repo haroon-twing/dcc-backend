@@ -165,12 +165,12 @@ const addMadarisStudent = asyncHandler(async (req, res) => {
       isActive: true
     });
 
-    if (existingStudent) {
-      return res.status(400).json({
-        success: false,
-        message: 'Student record already exists for this madrasa and country'
-      });
-    }
+    // if (existingStudent) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'Student record already exists for this madrasa and country'
+    //   });
+    // }
 
     const student = new MadarisStudents({
       total_foreign_students: parseInt(total_foreign_students, 10) || 0,
@@ -276,12 +276,12 @@ const updateMadarisStudent = asyncHandler(async (req, res) => {
         isActive: true
       });
 
-      if (existingStudent) {
-        return res.status(400).json({
-          success: false,
-          message: 'Another student record already exists for this madrasa and country'
-        });
-      }
+      // if (existingStudent) {
+      //   return res.status(400).json({
+      //     success: false,
+      //     message: 'Another student record already exists for this madrasa and country'
+      //   });
+      // }
     }
 
     const updatedStudent = await student.save();
