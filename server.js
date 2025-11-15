@@ -43,6 +43,8 @@ const safecityMainRoutes = require('./routes/safecityMainRoutes');
 const safecityIntegrationsRoutes = require('./routes/safecityIntegrationsRoutes');
 const safecityThreatAlertsRoutes = require('./routes/safecityThreatAlertsRoutes');
 const safecityPoliceStationConnectivityRoutes = require('./routes/safecityPoliceStationConnectivityRoutes');
+const ngoMainRoutes = require('./routes/ngoMainRoutes');
+const ngoMeetingsRoutes = require('./routes/ngoMeetingsRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -99,6 +101,8 @@ app.use('/api/safecity', safecityMeasuresTakenRoutes);
 app.use('/api/safecity', safecityIntegrationsRoutes);
 app.use('/api/safecity', safecityThreatAlertsRoutes);
 app.use('/api/safecity', safecityPoliceStationConnectivityRoutes);
+app.use('/api/ngo-main', ngoMainRoutes);
+app.use('/api/ngo', ngoMeetingsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
