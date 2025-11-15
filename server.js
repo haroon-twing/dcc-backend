@@ -48,6 +48,7 @@ const ngoMeetingsRoutes = require('./routes/ngoMeetingsRoutes');
 const ngoInvestigatedRoutes = require('./routes/ngoInvestigatedRoutes');
 const ngoSuspeciousTransactionRoutes = require('./routes/ngoSuspeciousTransactionRoutes');
 const ngoVerifCasesRecommToMOIRoutes = require('./routes/ngoVerifCasesRecommToMOIRoutes');
+const cityRoutes = require('./routes/luCityRoutes');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -86,7 +87,7 @@ app.use('/api/madaris', madarisStudentsRoutes);
 app.use('/api', madarisRoutes);
 app.use('/api/all-school-of-thoughts', schoolOfThoughtRoutes);
 app.use('/api/all-countries', countryRoutes);
-app.use('/api/all-cities', countryRoutes);
+app.use('/api/all-cities', cityRoutes);
 app.use('/api/madaris', madarisTeachingVocationalSkillRoutes);
 app.use('/api/madaris', madarisTeachersSupportHighEducationRoutes);
 app.use('/api/madaris', madarisModelInternationalStandardRoutes);

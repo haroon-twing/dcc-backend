@@ -106,15 +106,6 @@ const addSafecityPoliceStationConnectivity = asyncHandler(async (req, res) => {
       });
     }
 
-    // Check if record already exists for this SafecityMain
-    const existingRecord = await SafecityPoliceStationConnectivity.findOne({ sc_id });
-    if (existingRecord) {
-      return res.status(400).json({
-        success: false,
-        message: 'Record already exists for this SafecityMain'
-      });
-    }
-
     // Create new record
     const newRecord = new SafecityPoliceStationConnectivity({
       no_of_ps_connected,
@@ -188,14 +179,7 @@ const updateSafecityPoliceStationConnectivity = asyncHandler(async (req, res) =>
           message: 'Invalid SafecityMain ID format'
         });
       }
-      // Check if another record already exists with the new sc_id
-      const existingRecord = await SafecityPoliceStationConnectivity.findOne({ sc_id });
-      if (existingRecord && existingRecord._id.toString() !== id) {
-        return res.status(400).json({
-          success: false,
-          message: 'Another record already exists for the specified SafecityMain'
-        });
-      }
+      
       record.sc_id = sc_id;
     }
 
