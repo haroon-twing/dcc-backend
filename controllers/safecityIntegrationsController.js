@@ -110,15 +110,6 @@ const addSafecityIntegration = asyncHandler(async (req, res) => {
       });
     }
 
-    // Check if integration already exists for this SafecityMain
-    const existingIntegration = await SafecityIntegrations.findOne({ sc_id });
-    if (existingIntegration) {
-      return res.status(400).json({
-        success: false,
-        message: 'Integration record already exists for this SafecityMain'
-      });
-    }
-
     // Create new integration record
     const newIntegration = new SafecityIntegrations({
       integ_with_dcc,
